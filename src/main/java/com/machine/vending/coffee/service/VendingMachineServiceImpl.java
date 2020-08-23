@@ -1,9 +1,13 @@
 package com.machine.vending.coffee.service;
 
-import com.machine.vending.coffee.enums.MenuItems;
+import com.machine.vending.coffee.enums.Menu;
 import com.machine.vending.coffee.models.Ingredient;
 import com.machine.vending.coffee.repository.VendingMachineRepository;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 public class VendingMachineServiceImpl implements VendingMachineService {
@@ -22,8 +26,10 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         return vendingMachineService;
     }
 
-    public MenuItems[] getMenu() {
-        return MenuItems.values();
+    public List<Menu> getMenu() {
+        List<Menu> menuList = Arrays.asList(Menu.values());
+        Collections.sort(menuList, Comparator.comparing(Menu::getName));
+        return menuList;
     }
 
     public Map<Integer, Double> getStock() {
@@ -36,8 +42,8 @@ public class VendingMachineServiceImpl implements VendingMachineService {
             return false;
         }
 
-        MenuItems beverageToPrepare = null;
-        for (MenuItems menuItem : getMenu()) {
+        Menu beverageToPrepare = null;
+        for (Menu menuItem : getMenu()) {
             if (menuItem.getId() == beverageId) {
                 beverageToPrepare = menuItem;
                 break;
@@ -45,7 +51,7 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         }
 
         for (Ingredient ingredient : beverageToPrepare.getIngredients()) {
-            int ingredientId = ingredient.getIngredientEnum().getId();
+            int ingredientId = ingredient.getIngredientMetadata().getId();
             double quantityNeeded = ingredient.getQuantity();
 
             vendingMachineRepository.updateStock(ingredientId, -1 * quantityNeeded);
@@ -59,8 +65,8 @@ public class VendingMachineServiceImpl implements VendingMachineService {
 
     public boolean canBeverageBeDispensed(int beverageId) {
 
-        MenuItems beverageToPrepare = null;
-        for (MenuItems menuItem : getMenu()) {
+        Menu beverageToPrepare = null;
+        for (Menu menuItem : getMenu()) {
             if (menuItem.getId() == beverageId) {
                 beverageToPrepare = menuItem;
                 break;
@@ -68,7 +74,7 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         }
 
         for (Ingredient ingredient : beverageToPrepare.getIngredients()) {
-            int ingredientId = ingredient.getIngredientEnum().getId();
+            int ingredientId = ingredient.getIngredientMetadata().getId();
             double quantityNeeded = ingredient.getQuantity();
 
             if (!vendingMachineRepository.ingredientAvailable(ingredientId, quantityNeeded)) {

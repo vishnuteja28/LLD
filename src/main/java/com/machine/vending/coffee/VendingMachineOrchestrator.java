@@ -1,10 +1,16 @@
 package com.machine.vending.coffee;
 
-import com.machine.vending.coffee.enums.IngredientEnum;
-import com.machine.vending.coffee.enums.MenuItems;
+import com.machine.vending.coffee.dto.IngredientDto;
+import com.machine.vending.coffee.enums.Menu;
+import com.machine.vending.coffee.exceptions.BeverageNotFoundException;
+import com.machine.vending.coffee.models.Ingredient;
 import com.machine.vending.coffee.service.VendingMachineService;
 import com.machine.vending.coffee.service.VendingMachineServiceImpl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 public class VendingMachineOrchestrator {
@@ -16,12 +22,12 @@ public class VendingMachineOrchestrator {
     }
 
     public String getMenu() {
-        MenuItems[] menuItems = vendingMachineService.getMenu();
+        List<Menu> menuList = vendingMachineService.getMenu();
 
         StringBuilder fullMenu = new StringBuilder("");
-        for (int i = 0; i < menuItems.length; i++) {
-            fullMenu.append(menuItems[i].getId() + ". " + menuItems[i].getName()
-                    /*+ "  " + menuItems[i].getPrice()*/);
+        for (int i = 0; i < menuList.size(); i++) {
+            fullMenu.append(menuList.get(i).getId() + ". " + menuList.get(i).getName()
+                    + "  " + menuList.get(i).getPrice());
             fullMenu.append("\n");
         }
         return fullMenu.toString();
@@ -30,21 +36,29 @@ public class VendingMachineOrchestrator {
     public String getStock() {
         Map<Integer, Double> ingredientMap = vendingMachineService.getStock();
 
-        StringBuilder fullIngredients = new StringBuilder("");
+        List<IngredientDto> ingredientDtos = new ArrayList<>();
         for (Map.Entry<Integer, Double> entry : ingredientMap.entrySet()) {
-            fullIngredients.append(entry.getKey() + ". " + getIngredientName(entry.getKey()) +
-                    "  >>> Quantity rem: " + entry.getValue());
+            IngredientDto ingredientDto = new IngredientDto(entry.getKey(), Ingredient.IngredientMetadata.getName(entry.getKey()), entry.getValue());
+            ingredientDtos.add(ingredientDto);
+        }
 
+        Collections.sort(ingredientDtos, Comparator.comparing(IngredientDto::getName));
+
+        StringBuilder fullIngredients = new StringBuilder("");
+        for (IngredientDto ingredientDto : ingredientDtos) {
+            fullIngredients.append(ingredientDto.getId() + ". " + ingredientDto.getName() +
+                    "  >>> Quantity rem: " + ingredientDto.getQuantityRemaining());
             fullIngredients.append("\n");
         }
+
         return fullIngredients.toString();
     }
 
-    public void dispenseBeverage(int beverageId) {
+    public void dispenseBeverage(int beverageId) throws BeverageNotFoundException {
 
         boolean isAvailable = vendingMachineService.dispenseBeverage(beverageId);
         if (isAvailable) {
-            System.out.println("***** Dispensing.... *****");
+            System.out.println("***** Dispensing: " + Menu.getName(beverageId) + " .... *****");
         } else {
             System.out.println("***** Out of stock !!!! *****");
         }
@@ -52,9 +66,5 @@ public class VendingMachineOrchestrator {
 
     public double stockUp(int selectedIngredient, double topUpQuantity) {
         return vendingMachineService.stockUp(selectedIngredient, topUpQuantity);
-    }
-
-    private String getIngredientName(int ingredientId) {
-        return IngredientEnum.getName(ingredientId);
     }
 }
