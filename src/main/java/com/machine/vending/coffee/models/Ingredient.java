@@ -3,13 +3,19 @@ package com.machine.vending.coffee.models;
 import com.machine.vending.coffee.exceptions.IngredientNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public abstract class Ingredient {
 
     private IngredientMetadata ingredientMetadata;
     private double quantity;
+
+    public Ingredient(IngredientMetadata ingredientMetadata) {
+        this.ingredientMetadata = ingredientMetadata;
+    }
 
     @Getter
     @AllArgsConstructor

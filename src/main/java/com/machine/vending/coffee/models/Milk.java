@@ -1,9 +1,13 @@
 package com.machine.vending.coffee.models;
 
-import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+@Setter
 public class Milk extends Ingredient {
+
+    public Milk() {
+        super(IngredientMetadata.MILK);
+    }
 
     public Milk(double quantity) {
         super(IngredientMetadata.MILK, quantity);

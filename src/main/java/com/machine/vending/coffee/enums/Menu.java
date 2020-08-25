@@ -25,7 +25,11 @@ public enum Menu {
     Menu(int id, String name) {
         this.id = id;
         this.name = name;
-        this.ingredients = IngredientFactory.getIngredients(id);
+        try {
+            this.ingredients = IngredientFactory.getIngredients(id);
+        } catch (BeverageNotFoundException e) {
+            e.printStackTrace();
+        }
         this.price = calculatePrice(ingredients);
     }
 

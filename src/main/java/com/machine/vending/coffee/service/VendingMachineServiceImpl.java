@@ -8,14 +8,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class VendingMachineServiceImpl implements VendingMachineService {
 
     private static VendingMachineService vendingMachineService;
     private VendingMachineRepository vendingMachineRepository;
 
-    public VendingMachineServiceImpl() {
+    private VendingMachineServiceImpl() {
         vendingMachineRepository = VendingMachineRepository.getInstance();
     }
 
@@ -32,7 +31,7 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         return menuList;
     }
 
-    public Map<Integer, Double> getStock() {
+    public List<Ingredient> getStock() {
         return vendingMachineRepository.getStock();
     }
 
