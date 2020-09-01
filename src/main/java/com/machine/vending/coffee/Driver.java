@@ -1,7 +1,5 @@
 package com.machine.vending.coffee;
 
-
-import com.machine.vending.coffee.enums.Menu;
 import com.machine.vending.coffee.exceptions.BeverageNotFoundException;
 import com.machine.vending.coffee.models.Ingredient;
 import com.machine.vending.coffee.repository.VendingMachineRepository;
@@ -28,7 +26,7 @@ public class Driver {
 
         while (true) {
 
-            System.out.println("1. Load Menu");
+            System.out.println("1. Load MenuItem");
             System.out.println("2. Load Stock");
             System.out.println("3. Exit");
             int selectedOption = scanner.nextInt();
@@ -38,7 +36,7 @@ public class Driver {
                 System.out.print("Choose Beverage: ");
                 int selectedBeverage = scanner.nextInt();
 
-                if (isValidBeverage(selectedBeverage)) {
+                if (vendingMachineService.isValidBeverage(selectedBeverage)) {
                     vendingMachineOrchestrator.dispenseBeverage(selectedBeverage);
                 } else {
                     System.out.println(INVALID);
@@ -49,7 +47,7 @@ public class Driver {
                 System.out.println(vendingMachineOrchestrator.getStock());
                 System.out.println("R Refill");
                 System.out.println("Q Quit");
-                System.out.println("M Main Menu");
+                System.out.println("M Main MenuItem");
 
                 String selected = scanner.next();
 
@@ -75,15 +73,5 @@ public class Driver {
                 System.out.println(INVALID);
             }
         }
-    }
-
-    private static boolean isValidBeverage(int beverageId) {
-
-        for (Menu menu : Menu.values()) {
-            if (menu.getId() == beverageId) {
-                return true;
-            }
-        }
-        return false;
     }
 }

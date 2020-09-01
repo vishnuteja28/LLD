@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public enum Menu {
+public enum MenuItem {
 
     COFFEE(1, "Coffee"),
     CHOCOLATE_MILK(2, "Chocolate Milk"),
@@ -22,7 +22,7 @@ public enum Menu {
     private double price;
     private List<Ingredient> ingredients;
 
-    Menu(int id, String name) {
+    MenuItem(int id, String name) {
         this.id = id;
         this.name = name;
         try {
@@ -34,9 +34,9 @@ public enum Menu {
     }
 
     public static String getName(int beverageId) throws BeverageNotFoundException {
-        for (Menu menu : Menu.values()) {
-            if (menu.getId() == beverageId) {
-                return menu.getName();
+        for (MenuItem menuItem : MenuItem.values()) {
+            if (menuItem.getId() == beverageId) {
+                return menuItem.getName();
             }
         }
         throw new BeverageNotFoundException("Beverage with id: " + beverageId + " not found");

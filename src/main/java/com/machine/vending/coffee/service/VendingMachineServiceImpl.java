@@ -1,6 +1,6 @@
 package com.machine.vending.coffee.service;
 
-import com.machine.vending.coffee.enums.Menu;
+import com.machine.vending.coffee.enums.MenuItem;
 import com.machine.vending.coffee.models.Ingredient;
 import com.machine.vending.coffee.repository.VendingMachineRepository;
 
@@ -17,24 +17,27 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         this.vendingMachineRepository = vendingMachineRepository;
     }
 
-    public List<Menu> getMenu() {
-        List<Menu> menuList = Arrays.asList(Menu.values());
-        Collections.sort(menuList, Comparator.comparing(Menu::getName));
-        return menuList;
+    @Override
+    public List<MenuItem> getMenu() {
+        List<MenuItem> menuItemList = Arrays.asList(MenuItem.values());
+        Collections.sort(menuItemList, Comparator.comparing(MenuItem::getName));
+        return menuItemList;
     }
 
+    @Override
     public List<Ingredient> getStock() {
         return vendingMachineRepository.getStock();
     }
 
+    @Override
     public boolean dispenseBeverage(int beverageId) {
 
         if (!canBeverageBeDispensed(beverageId)) {
             return false;
         }
 
-        Menu beverageToPrepare = null;
-        for (Menu menuItem : getMenu()) {
+        MenuItem beverageToPrepare = null;
+        for (MenuItem menuItem : getMenu()) {
             if (menuItem.getId() == beverageId) {
                 beverageToPrepare = menuItem;
                 break;
@@ -50,14 +53,16 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         return true;
     }
 
+    @Override
     public double stockUp(int selectedIngredient, double topUpQuantity) {
         return vendingMachineRepository.updateStock(selectedIngredient, topUpQuantity);
     }
 
+    @Override
     public boolean canBeverageBeDispensed(int beverageId) {
 
-        Menu beverageToPrepare = null;
-        for (Menu menuItem : getMenu()) {
+        MenuItem beverageToPrepare = null;
+        for (MenuItem menuItem : getMenu()) {
             if (menuItem.getId() == beverageId) {
                 beverageToPrepare = menuItem;
                 break;
@@ -73,5 +78,16 @@ public class VendingMachineServiceImpl implements VendingMachineService {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean isValidBeverage(int beverageId) {
+
+        for (MenuItem menuItem : MenuItem.values()) {
+            if (menuItem.getId() == beverageId) {
+                return true;
+            }
+        }
+        return false;
     }
 }
