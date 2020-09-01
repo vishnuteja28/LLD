@@ -10,18 +10,10 @@ import java.util.Map;
 
 public class VendingMachineRepository {
 
-    private static VendingMachineRepository vendingMachineRepository;
     private Map<Integer, Double> ingredientMap; //key: ingredient id, value: quantityLeft
 
-    private VendingMachineRepository() { //initialize all ingredients with some quantity
+    public VendingMachineRepository() {
         ingredientMap = new HashMap<>();
-    }
-
-    public static VendingMachineRepository getInstance() {
-        if (vendingMachineRepository == null) {
-            vendingMachineRepository = new VendingMachineRepository();
-        }
-        return vendingMachineRepository;
     }
 
     public List<Ingredient> getStock() {

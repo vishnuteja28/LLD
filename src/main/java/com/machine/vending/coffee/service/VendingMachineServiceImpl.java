@@ -11,18 +11,10 @@ import java.util.List;
 
 public class VendingMachineServiceImpl implements VendingMachineService {
 
-    private static VendingMachineService vendingMachineService;
     private VendingMachineRepository vendingMachineRepository;
 
-    private VendingMachineServiceImpl() {
-        vendingMachineRepository = VendingMachineRepository.getInstance();
-    }
-
-    public static VendingMachineService getInstance() {
-        if (vendingMachineService == null) {
-            vendingMachineService = new VendingMachineServiceImpl();
-        }
-        return vendingMachineService;
+    public VendingMachineServiceImpl(final VendingMachineRepository vendingMachineRepository) {
+        this.vendingMachineRepository = vendingMachineRepository;
     }
 
     public List<Menu> getMenu() {

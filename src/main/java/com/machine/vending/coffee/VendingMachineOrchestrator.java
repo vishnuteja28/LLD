@@ -14,8 +14,8 @@ public class VendingMachineOrchestrator {
 
     private VendingMachineService vendingMachineService;
 
-    public VendingMachineOrchestrator() {
-        this.vendingMachineService = VendingMachineServiceImpl.getInstance();
+    public VendingMachineOrchestrator(final VendingMachineService vendingMachineService) {
+        this.vendingMachineService = vendingMachineService;
     }
 
     public String getMenu() {

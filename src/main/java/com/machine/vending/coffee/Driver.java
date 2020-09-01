@@ -4,6 +4,9 @@ package com.machine.vending.coffee;
 import com.machine.vending.coffee.enums.Menu;
 import com.machine.vending.coffee.exceptions.BeverageNotFoundException;
 import com.machine.vending.coffee.models.Ingredient;
+import com.machine.vending.coffee.repository.VendingMachineRepository;
+import com.machine.vending.coffee.service.VendingMachineService;
+import com.machine.vending.coffee.service.VendingMachineServiceImpl;
 
 import java.util.Scanner;
 
@@ -15,7 +18,9 @@ public class Driver {
 
         Scanner scanner = new Scanner(System.in);
 
-        VendingMachineOrchestrator vendingMachineOrchestrator = new VendingMachineOrchestrator();
+        VendingMachineRepository vendingMachineRepository = new VendingMachineRepository();
+        VendingMachineService vendingMachineService = new VendingMachineServiceImpl(vendingMachineRepository);
+        VendingMachineOrchestrator vendingMachineOrchestrator = new VendingMachineOrchestrator(vendingMachineService);
 
         for (int i = 0; i < Ingredient.IngredientMetadata.values().length; i++) {
             vendingMachineOrchestrator.stockUp(Ingredient.IngredientMetadata.values()[i].getId(), 300);
