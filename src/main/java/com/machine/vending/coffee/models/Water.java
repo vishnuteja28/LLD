@@ -1,8 +1,5 @@
 package com.machine.vending.coffee.models;
 
-import lombok.Setter;
-
-@Setter
 public class Water extends Ingredient {
 
     public Water() {

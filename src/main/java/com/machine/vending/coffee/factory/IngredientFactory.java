@@ -1,7 +1,5 @@
 package com.machine.vending.coffee.factory;
 
-import com.machine.vending.coffee.exceptions.BeverageNotFoundException;
-import com.machine.vending.coffee.exceptions.IngredientNotFoundException;
 import com.machine.vending.coffee.models.ChocolatePowder;
 import com.machine.vending.coffee.models.CoffeePowder;
 import com.machine.vending.coffee.models.Cream;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class IngredientFactory {
 
-    public static List<Ingredient> getIngredients(int beverageId) throws BeverageNotFoundException {
+    public static List<Ingredient> getIngredients(int beverageId) {
 
         List<Ingredient> ingredients = new ArrayList<>();
 
@@ -52,12 +50,11 @@ public class IngredientFactory {
                 ingredients.add(new Water(6));
                 break;
             default:
-                throw new BeverageNotFoundException("Beverage with id: " + beverageId + " not found !!!");
         }
         return ingredients;
     }
 
-    public static Ingredient getIngredientType(int ingredientId) throws IngredientNotFoundException {
+    public static Ingredient getIngredientType(int ingredientId) {
 
         switch (ingredientId) {
             case 1: //sugar
@@ -75,7 +72,7 @@ public class IngredientFactory {
             case 7: //cream
                 return new Cream();
             default:
-                throw new IngredientNotFoundException("Ingredient with id: " + ingredientId + " not found !!!");
+                return null;
         }
     }
 }

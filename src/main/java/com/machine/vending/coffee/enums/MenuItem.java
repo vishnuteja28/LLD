@@ -25,15 +25,11 @@ public enum MenuItem {
     MenuItem(int id, String name) {
         this.id = id;
         this.name = name;
-        try {
-            this.ingredients = IngredientFactory.getIngredients(id);
-        } catch (BeverageNotFoundException e) {
-            e.printStackTrace();
-        }
+        this.ingredients = IngredientFactory.getIngredients(id);
         this.price = calculatePrice(ingredients);
     }
 
-    public static String getName(int beverageId) throws BeverageNotFoundException {
+    public static String getBeverageName(int beverageId) throws BeverageNotFoundException {
         for (MenuItem menuItem : MenuItem.values()) {
             if (menuItem.getId() == beverageId) {
                 return menuItem.getName();
