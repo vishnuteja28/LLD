@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VendingMachineRepository {
+public class VendingMachine {
 
     private Map<Integer, Double> ingredientMap; //key: ingredient id, value: quantityLeft
 
-    public VendingMachineRepository() {
+    public VendingMachine() {
         ingredientMap = new HashMap<>();
     }
 

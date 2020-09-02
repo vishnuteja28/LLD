@@ -1,15 +1,15 @@
 package com.machine.vending.coffee.service;
 
-import com.machine.vending.coffee.enums.MenuItem;
+import com.machine.vending.coffee.enums.BeverageMenuItem;
 import com.machine.vending.coffee.models.Ingredient;
 
 import java.util.List;
 
-public interface VendingMachineService {
+public interface VendingMachine {
 
     List<Ingredient> getStock();
 
-    List<MenuItem> getMenu();
+    List<BeverageMenuItem> getMenu();
 
     boolean dispenseBeverage(int beverageId);
 

@@ -2,8 +2,7 @@ package com.machine.vending.coffee;
 
 import com.machine.vending.coffee.exceptions.BeverageNotFoundException;
 import com.machine.vending.coffee.models.Ingredient;
-import com.machine.vending.coffee.repository.VendingMachineRepository;
-import com.machine.vending.coffee.service.VendingMachineService;
+import com.machine.vending.coffee.repository.VendingMachine;
 import com.machine.vending.coffee.service.VendingMachineServiceImpl;
 
 import java.util.Scanner;
@@ -16,9 +15,9 @@ public class Driver {
 
         Scanner scanner = new Scanner(System.in);
 
-        VendingMachineRepository vendingMachineRepository = new VendingMachineRepository();
-        VendingMachineService vendingMachineService = new VendingMachineServiceImpl(vendingMachineRepository);
-        VendingMachineOrchestrator vendingMachineOrchestrator = new VendingMachineOrchestrator(vendingMachineService);
+        VendingMachine vendingMachineRepository = new VendingMachine();
+        com.machine.vending.coffee.service.VendingMachine vendingMachine = new VendingMachineImpl(vendingMachineRepository);
+        VendingMachineOrchestrator vendingMachineOrchestrator = new VendingMachineOrchestrator(vendingMachine);
 
         for (int i = 0; i < Ingredient.IngredientMetadata.values().length; i++) {
             vendingMachineOrchestrator.stockUp(Ingredient.IngredientMetadata.values()[i].getId(), 300);
@@ -26,7 +25,7 @@ public class Driver {
 
         while (true) {
 
-            System.out.println("1. Load MenuItem");
+            System.out.println("1. Load BeverageMenuItem");
             System.out.println("2. Load Stock");
             System.out.println("3. Exit");
             int selectedOption = scanner.nextInt();
@@ -36,7 +35,7 @@ public class Driver {
                 System.out.print("Choose Beverage: ");
                 int selectedBeverage = scanner.nextInt();
 
-                if (vendingMachineService.isValidBeverage(selectedBeverage)) {
+                if (vendingMachine.isValidBeverage(selectedBeverage)) {
                     vendingMachineOrchestrator.dispenseBeverage(selectedBeverage);
                 } else {
                     System.out.println(INVALID);
@@ -47,7 +46,7 @@ public class Driver {
                 System.out.println(vendingMachineOrchestrator.getStock());
                 System.out.println("R Refill");
                 System.out.println("Q Quit");
-                System.out.println("M Main MenuItem");
+                System.out.println("M Main BeverageMenuItem");
 
                 String selected = scanner.next();
 
