@@ -20,14 +20,17 @@ public class CoffeeVendingMachineOrchestrator {
     }
 
     public void getMenu() {
+
         List<MenuItem> menuItemList = vendingMachine.getMenu();
 
         StringBuilder fullMenu = new StringBuilder("");
-        for (int i = 0; i < menuItemList.size(); i++) {
-            fullMenu.append(menuItemList.get(i).getId() + ". " + menuItemList.get(i).getName()
-                    + "  " + menuItemList.get(i).getPrice());
+
+        menuItemList.stream().forEach(menuItem -> {
+            fullMenu.append(menuItem.getId() + ". " + menuItem.getName()
+                    + "  " + menuItem.getPrice());
             fullMenu.append("\n");
-        }
+        });
+
         System.out.println(fullMenu.toString());
     }
 
@@ -37,11 +40,12 @@ public class CoffeeVendingMachineOrchestrator {
         Collections.sort(ingredients, Comparator.comparing(a -> a.getIngredientMetadata().getName()));
 
         StringBuilder fullIngredients = new StringBuilder("");
-        for (Ingredient ingredient : ingredients) {
+
+        ingredients.stream().forEach(ingredient -> {
             fullIngredients.append(ingredient.getIngredientMetadata().getId() + ". " + ingredient.getIngredientMetadata().getName() +
                     "  >>> Quantity rem: " + ingredient.getQuantity());
             fullIngredients.append("\n");
-        }
+        });
 
         System.out.println(fullIngredients.toString());
     }

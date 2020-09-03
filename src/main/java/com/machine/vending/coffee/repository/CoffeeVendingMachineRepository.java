@@ -19,11 +19,13 @@ public class CoffeeVendingMachineRepository {
     public List<Ingredient> getStock() {
 
         List<Ingredient> ingredients = new ArrayList<>();
-        for (Map.Entry<Integer, Double> entry : ingredientMap.entrySet()) {
+
+        ingredientMap.entrySet().stream().forEach(entry -> {
             Ingredient ingredient = IngredientFactory.getIngredientType(entry.getKey());
             ingredient.setQuantity(entry.getValue());
             ingredients.add(ingredient);
-        }
+        });
+
         return ingredients;
     }
 

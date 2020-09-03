@@ -35,7 +35,9 @@ public class CoffeeVendingMachineServiceImpl implements CoffeeVendingMachine {
     @Override
     public void dispenseBeverage(int beverageId) throws BeverageNotFoundException, InsufficientIngredientsException {
 
-        if (!isValidBeverage(beverageId)) {
+        MenuItem beverageToPrepare = getMenu().stream().filter(m -> m.getId() == beverageId).findAny().orElse(null);
+
+        if (beverageToPrepare == null) {
             throw new BeverageNotFoundException("Beverage with id: " + beverageId + " not found !!!");
         }
 
@@ -43,39 +45,30 @@ public class CoffeeVendingMachineServiceImpl implements CoffeeVendingMachine {
             throw new InsufficientIngredientsException("Beverage with id : " + beverageId + " can't be dispensed as there are insufficient ingredients");
         }
 
-        MenuItem beverageToPrepare = null;
-        for (MenuItem menuItem : getMenu()) {
-            if (menuItem.getId() == beverageId) {
-                beverageToPrepare = menuItem;
-                break;
-            }
-        }
+        beverageToPrepare.getIngredients().stream().forEach(ingredient -> {
 
-        for (Ingredient ingredient : beverageToPrepare.getIngredients()) {
             int ingredientId = ingredient.getIngredientMetadata().getId();
             double quantityNeeded = ingredient.getQuantity();
 
             coffeeVendingMachineRepository.updateStock(ingredientId, -1 * quantityNeeded);
-        }
+        });
     }
 
     @Override
-    public double updateStock(int selectedIngredient, double topUpQuantity) throws IngredientNotFoundException {
-        if (!isValidIngredient(selectedIngredient)) {
-            throw new IngredientNotFoundException("Ingredient with id : " + selectedIngredient + " not found");
+    public double updateStock(int selectedIngredientId, double topUpQuantity) throws IngredientNotFoundException {
+
+        Ingredient.IngredientMetadata ingredient = Arrays.asList(Ingredient.IngredientMetadata.values()).stream()
+                .filter(i -> i.getId() == selectedIngredientId).findAny().orElse(null);
+
+        if (ingredient == null) {
+            throw new IngredientNotFoundException("Ingredient with id : " + selectedIngredientId + " not found");
         }
-        return coffeeVendingMachineRepository.updateStock(selectedIngredient, topUpQuantity);
+        return coffeeVendingMachineRepository.updateStock(selectedIngredientId, topUpQuantity);
     }
 
     private boolean canBeverageBeDispensed(int beverageId) {
 
-        MenuItem beverageToPrepare = null;
-        for (MenuItem menuItem : getMenu()) {
-            if (menuItem.getId() == beverageId) {
-                beverageToPrepare = menuItem;
-                break;
-            }
-        }
+        MenuItem beverageToPrepare = getMenu().stream().filter(m -> m.getId() == beverageId).findAny().orElse(null);
 
         for (Ingredient ingredient : beverageToPrepare.getIngredients()) {
             int ingredientId = ingredient.getIngredientMetadata().getId();
@@ -88,22 +81,4 @@ public class CoffeeVendingMachineServiceImpl implements CoffeeVendingMachine {
         return true;
     }
 
-    private boolean isValidBeverage(int beverageId) {
-
-        for (MenuItem menuItem : MenuItem.values()) {
-            if (menuItem.getId() == beverageId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isValidIngredient(int ingredientId) {
-        for (Ingredient.IngredientMetadata ingredientMetadata : Ingredient.IngredientMetadata.values()) {
-            if (ingredientMetadata.getId() == ingredientId) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
